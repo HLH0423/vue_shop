@@ -28,7 +28,19 @@
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-standard": "^4.1.0",
     "eslint-plugin-vue": "^6.2.2",
+    "less": "^4.1.3",
+    "less-loader": "^7.3.0",
+    "sass-loader": "^10.4.1",
     "vue-cli-plugin-element": "^1.0.1",
     "vue-template-compiler": "^2.7.14"
-  }
+  },
+  "description": "## Project setup ``` npm install ```",
+  "main": ".eslintrc.js",
+  "repository": {
+    "type": "git",
+    "url": "https://gitee.com/han-lihua0423/vue_shop.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
