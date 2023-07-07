@@ -37,24 +37,25 @@
               </el-col>
               <!-- 渲染二级和三级权限 -->
               <el-col :span="19">
+                <!-- 通过 for 循环 嵌套渲染二级权限 -->
                 <el-row
                   :class="[i2 === 0 ? '' : 'bdtop', 'vcenter']"
                   v-for="(item2, i2) in item1.children"
                   :key="item2.id"
                 >
-                  <!-- 通过 for 循环 嵌套渲染二级权限 -->
                   <el-col :span="6">
                     <el-tag
                       type="success"
                       closable
                       @close="removeRightById(scope.row, item2.id)"
-                      >{{ item2.authName }}</el-tag
-                    >
+                      >{{ item2.authName }}
+                    </el-tag>
                     <i class="el-icon-caret-right"></i>
                   </el-col>
+                  <!-- 通过 for 循环 嵌套渲染三级权限 -->
                   <el-col :span="18">
                     <el-tag
-                      v-for="(item3, i3) in item2.children"
+                      v-for="item3 in item2.children"
                       :key="item3.id"
                       type="warning"
                       closable
@@ -134,12 +135,12 @@ export default {
       // 树形控件的属性绑定对象
       treeProps: {
         label: 'authName',
-        children: 'children',
+        children: 'children'
       },
       // 默认选中的节点Id值数组
       defKeys: [],
       // 当前即将分配权限的角色 id
-      roleId: '',
+      roleId: ''
     }
   },
   created() {
@@ -149,8 +150,7 @@ export default {
     // 获取所有角色的列表
     async getRoleList() {
       const { data: res } = await this.$http.get('roles')
-      if (res.meta.status !== 200)
-        return this.$message.error('获取角色列表失败')
+      if (res.meta.status !== 200) { return this.$message.error('获取角色列表失败') }
       this.rolelist = res.data
     },
 
@@ -163,13 +163,14 @@ export default {
         {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-          type: 'warning',
+          type: 'warning'
         }
       ).catch((err) => err)
       if (confirmResult !== 'confirm') return this.$message.info('取消了删除！')
       const { data: res } = await this.$http.delete(
         `roles/${role.id}/rights/${rightId}`
       )
+      // 返回的 data，是当前角色下最新的权限数据
       if (res.meta.status !== 200) return this.$message.error('删除权限成功')
       role.children = res.data
     },
@@ -178,8 +179,7 @@ export default {
     async showSetRightDialog(role) {
       this.roleId = role.id
       const { data: res } = await this.$http.get('rights/tree')
-      if (res.meta.status !== 200)
-        return this.$message.error('获取权限数据失败')
+      if (res.meta.status !== 200) { return this.$message.error('获取权限数据失败') }
       this.rightslist = res.data
       // 递归获取三级节点的Id
       this.getLeafKeys(role, this.defKeys)
@@ -188,6 +188,7 @@ export default {
 
     // 通过递归的形式，获取角色下所有三级权限的id，并保存到 defKeys 数组中
     getLeafKeys(node, arr) {
+      // 如果当前 node 节点不包含 children 属性，则是三级节点
       if (!node.children) {
         return arr.push(node.id)
       }
@@ -205,7 +206,7 @@ export default {
     async allotRights() {
       const keys = [
         ...this.$refs.treeRef.getCheckedKeys(),
-        ...this.$refs.treeRef.getHalfCheckedKeys(),
+        ...this.$refs.treeRef.getHalfCheckedKeys()
       ]
       const idStr = keys.join(',')
 
@@ -217,8 +218,8 @@ export default {
       this.$message.success('分配权限成功')
       this.getRoleList()
       this.setRightDialogVisible = false
-    },
-  },
+    }
+  }
 }
 </script>
 
@@ -232,7 +233,7 @@ export default {
 }
 
 .bdbottom {
-  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
 }
 
 .vcenter {
